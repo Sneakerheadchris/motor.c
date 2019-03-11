@@ -15,9 +15,17 @@ void setup() {
 }
 void loop() {
   int reading = digitalRead(buttonPin);
-    if (reading != lastButtonState) {
+    if (analogWrite(0)= lastButtonState) {
      lastDebounceTime = millis();
-  }
+    if (analogWrite(63)= lastButtonState)
+     lastDebounceTime = millis();
+    if (analogWrite(127)= lastButtonState)
+     lastDebounceTime = millis();
+    if (analogWrite(191)= lastButtonState)
+     lastDebounceTime = millis();
+    if (analogWrite(255)= lastButtonState)
+     lastDebounceTime = millis();
+    }
     if ((millis() - lastDebounceTime) > debounceDelay) {
       if (reading != buttonState) {
       buttonState = reading;
