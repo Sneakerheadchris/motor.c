@@ -1,7 +1,7 @@
 const int buttonPin = 2;    
-const int ledPin = 13;    
+const int motorPin = 3;    
 
-int ledState = HIGH;        
+int motorState = 0;        
 int buttonState;             
 int lastButtonState = LOW;   
 
@@ -10,33 +10,25 @@ unsigned long debounceDelay = 50;
 
 void setup() {
   pinMode(buttonPin, INPUT);
-  pinMode(ledPin, OUTPUT);
-    digitalWrite(ledPin, ledState);
+  pinMode(motorPin, OUTPUT);
+    analogWrite(motorPin, motorState);
 }
 void loop() {
   int reading = digitalRead(buttonPin);
-    if (analogWrite(0)= lastButtonState) {
-     lastDebounceTime = millis();
-    if (analogWrite(63)= lastButtonState)
-     lastDebounceTime = millis();
-    if (analogWrite(127)= lastButtonState)
-     lastDebounceTime = millis();
-    if (analogWrite(191)= lastButtonState)
-     lastDebounceTime = millis();
-    if (analogWrite(255)= lastButtonState)
-     lastDebounceTime = millis();
-    }
-    if ((millis() - lastDebounceTime) > debounceDelay) {
-      if (reading != buttonState) {
+ 
+  if (reading != lastButtonState) {
+    lastDebounceTime = millis();
+  }
+
+  if ((millis() - lastDebounceTime) > debounceDelay) {
+  if (reading != buttonState) {
       buttonState = reading;
-         if (buttonState == HIGH) {
-        ledState = !ledState;
+  if (buttonState == HIGH) {
+        motorState = !motorState;
       }
     }
   }
-digitalWrite(ledPin, ledState);
-lastButtonState = reading;
+
+ digitalWrite(motorPin, motorState);
+ lastButtonState = reading;
 }
-  
-
-
