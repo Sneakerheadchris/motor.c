@@ -1,34 +1,60 @@
-const int buttonPin = 2;    
-const int motorPin = 3;    
+const int buttonPin = 2;    // the number of the pushbutton pin
+ const int motorPin = 3;      // the number of the LED pin
 
-int motorState = 0;        
-int buttonState;             
-int lastButtonState = LOW;   
+// Variables will change:
+int motorState = 0;         // the current state of the output pin
+int buttonState;             // the current reading from the input pin
+int lastButtonState = LOW;   // the previous reading from the input pin
 
-unsigned long lastDebounceTime = 0;  
-unsigned long debounceDelay = 50; 
+// the following variables are unsigned longs because the time, measured in
+// milliseconds, will quickly become a bigger number than can be stored in an int.
+unsigned long lastDebounceTime = 0;  // the last time the output pin was toggled
+unsigned long debounceDelay = 50;    // the debounce time; increase if the output flickers
 
 void setup() {
-  pinMode(buttonPin, INPUT);
-  pinMode(motorPin, OUTPUT);
-    analogWrite(motorPin, motorState);
+   pinMode(buttonPin, INPUT);
+   pinMode(motorPin, OUTPUT);
+
+   // set initial LED state
+   analogWrite(motorPin, motorState);
 }
+
 void loop() {
-  int reading = digitalRead(buttonPin);
- 
-  if (reading != lastButtonState) {
-    lastDebounceTime = millis();
-  }
+   // read the state of the switch into a local variable:
+   int reading = digitalRead(buttonPin);
 
-  if ((millis() - lastDebounceTime) > debounceDelay) {
-  if (reading != buttonState) {
-      buttonState = reading;
-  if (buttonState == HIGH) {
-        motorState = !motorState;
-      }
-    }
-  }
+   // check to see if you just pressed the button
+   // (i.e. the input went from LOW to HIGH), and you've waited long enough
+   // since the last press to ignore any noise:
 
- digitalWrite(motorPin, motorState);
- lastButtonState = reading;
+   // If the switch changed, due to noise or pressing:
+   if (reading != lastButtonState) {
+     // reset the debouncing timer
+     lastDebounceTime = millis();
+   }
+
+   if ((millis() - lastDebounceTime) > debounceDelay) {
+     // whatever the reading is at, it's been there for longer than the debounce
+     // delay, so take it as the actual current state:
+
+     // if the button state has changed:
+     if (reading != buttonState) {
+       buttonState = reading;
+
+       // only toggle the LED if the new button state is HIGH
+       if (buttonState == HIGH) {
+         motorState+=50;
+   if(motorState>255)
+    motorState=0;
+       }
+     }
+   }
+
+   // set the motor:
+   analogWrite(motorPin, motorState);
+   
+   
+
+   // save the reading. Next time through the loop, it'll be the lastButtonState:
+   lastButtonState = reading;
 }
