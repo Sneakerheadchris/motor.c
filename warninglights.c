@@ -3,12 +3,22 @@
 #include <SPI.h>
 #include <ArdusatSDK.h>
 
+Display display;
+int demodelay=2000;
+
+void setup() {
+  display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
+}
+
+void loop() {
+  // Clear the OLED screen
+  display.clearDisplay();
 ArdusatSerial serialConnection(SERIAL_MODE_HARDWARE_AND_SOFTWARE, 8, 9);
 
 Acceleration accel;
 float gforce;
 
-int led1 = 13; //lED's are being assigned to their corresponding pins
+int led1 = 1; //lED's are being assigned to their corresponding pins
 int pindelay = 200; //the delay between each LED flash is 200 milliseconds
 
 void setup(void)
@@ -28,11 +38,17 @@ void loop(void)
   serialConnection.println(valueToJSON("G-Force", DATA_UNIT_METER_PER_SECONDSQUARED, gforce)); //the computer will print how much g force is created in meters/sec squared
    
   if (gforce>6) { 
-    digitalWrite(led1, HIGH);
-    delay(pindelay); //when the g force is calculated to be above 6 meters/sec squared, the LED will be determined as set to HIGH
-    }
-  else { 
-    digitalWrite(led1, LOW); //if the value is below the previous value of the if statement, LED is set to LOW
-    }
-
+  display.drawPixel(2, 7, WHITE);
+  display.drawPixel(3, 6, WHITE);
+  display.drawPixel(4, 2, WHITE);
+  display.drawPixel(4, 5, WHITE);
+  display.drawPixel(5, 5, WHITE);
+  display.drawPixel(6, 5, WHITE);
+  display.drawPixel(7, 5, WHITE);
+  display.drawPixel(8, 2, WHITE);
+  display.drawPixel(8, 5, WHITE);
+  display.drawPixel(9, 6, WHITE);
+  display.drawPixel(10, 7, WHITE);
+  display.display();
+  
 }
